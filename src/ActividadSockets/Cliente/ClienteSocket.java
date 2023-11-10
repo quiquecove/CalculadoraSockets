@@ -22,15 +22,15 @@ public class ClienteSocket {
         System.out.println("-----------------------------------");
 
         InetSocketAddress direccionServidor = new InetSocketAddress(IP_SERVER, PUERTO);
-
+        boolean flag=true;
 
 
 
             try (Scanner sc = new Scanner(System.in);
                  Socket socketAlServidor = new Socket()) {
-                while (true) {
+                while (flag) {
                     System.out.println("Que operacion desea realizar?");
-                    System.out.println("1-Sumar\n2-Restar\n3-Multiplicar\n4-Dividir");
+                    System.out.println("1-Sumar\n2-Restar\n3-Multiplicar\n4-Dividir\n5-Salir");
                     int eleccion = sc.nextInt();
                     sc.nextLine(); // Consumir el carácter de nueva línea
 
@@ -70,6 +70,14 @@ public class ClienteSocket {
                             socketAlServidor.connect(direccionServidor);
                             salida = new PrintStream(socketAlServidor.getOutputStream());
                             salida.println(operandos);
+                            break;
+                        case 5:
+                            System.out.println("Hasta pronto!");
+                            //operandos ="salir";
+                            //socketAlServidor.connect(direccionServidor);
+                            //salida = new PrintStream(socketAlServidor.getOutputStream());
+                            //salida.println(operandos);
+                            flag=false;
                             break;
                         default:
                             System.out.println("Error, operacion no valida");

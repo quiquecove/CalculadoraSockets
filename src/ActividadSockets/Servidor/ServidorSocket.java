@@ -52,13 +52,13 @@ public class ServidorSocket {
             //Estamos continuamente escuchando, es lo normal dentro del comportamiento
             //de un servidor, un programa que no para nunca
             boolean flag = true;
+            socketAlCliente = serverSocket.accept();
             while (flag) {
 
                 System.out.println("SERVIDOR: Esperando peticion por el puerto " + PUERTO);
 
                 //En este punto, se parara el programa, hasta que entre la peticion de
                 //un cliente, y sera en ese momento cuando se cree un objeto Socket
-                socketAlCliente = serverSocket.accept();
                 System.out.println("SERVIDOR: peticion numero " + ++peticion + " recibida");
 
                 entrada = new InputStreamReader(socketAlCliente.getInputStream());
@@ -108,19 +108,19 @@ public class ServidorSocket {
                     salida.println(resultado);
                 }
                 //cerrar servidor?
-                    /*
+
                     else if(stringRecibido.contains("salir")){
                         System.out.println("Apagando servidor...");
-                        flag=false;
+                        //flag=false;
                         String resultado="Server apagado";
                         salida = new PrintStream(socketAlCliente.getOutputStream());
                         salida.println(resultado);
+                        socketAlCliente.close();
 
 
-                    }
-                         */
+                }
+
                 //Si hemos llegado hasta aqui, cerramos las conexiones
-                socketAlCliente.close();
 
             }
         } catch (IOException e) {

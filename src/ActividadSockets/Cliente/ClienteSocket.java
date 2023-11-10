@@ -26,10 +26,12 @@ public class ClienteSocket {
 
 
 
-            try (Scanner sc = new Scanner(System.in);
-                 Socket socketAlServidor = new Socket()) {
-                while (flag) {
-                    System.out.println("Que operacion desea realizar?");
+        Socket socketAlServidor = new Socket();
+        try (Scanner sc = new Scanner(System.in))
+        {
+            socketAlServidor.connect(direccionServidor);
+            while (flag) {
+                System.out.println("Que operacion desea realizar?");
                     System.out.println("1-Sumar\n2-Restar\n3-Multiplicar\n4-Dividir\n5-Salir");
                     int eleccion = sc.nextInt();
                     sc.nextLine(); // Consumir el carácter de nueva línea
@@ -40,7 +42,7 @@ public class ClienteSocket {
                             numero1 = sc.nextLine();
                             numero2 = sc.nextLine();
                             operandos = numero1 + "_" + numero2;
-                            socketAlServidor.connect(direccionServidor);
+                            //socketAlServidor.connect(direccionServidor);
                             salida = new PrintStream(socketAlServidor.getOutputStream());
                             salida.println(operandos);
                             break;
@@ -49,7 +51,7 @@ public class ClienteSocket {
                             numero1 = sc.nextLine();
                             numero2 = sc.nextLine();
                             operandos = numero1 + "-" + numero2;
-                            socketAlServidor.connect(direccionServidor);
+                            //socketAlServidor.connect(direccionServidor);
                             salida = new PrintStream(socketAlServidor.getOutputStream());
                             salida.println(operandos);
                             break;
@@ -58,7 +60,7 @@ public class ClienteSocket {
                             numero1 = sc.nextLine();
                             numero2 = sc.nextLine();
                             operandos = numero1 + "m" + numero2;
-                            socketAlServidor.connect(direccionServidor);
+                            //socketAlServidor.connect(direccionServidor);
                             salida = new PrintStream(socketAlServidor.getOutputStream());
                             salida.println(operandos);
                             break;
@@ -67,16 +69,16 @@ public class ClienteSocket {
                             numero1 = sc.nextLine();
                             numero2 = sc.nextLine();
                             operandos = numero1 + "/" + numero2;
-                            socketAlServidor.connect(direccionServidor);
+                            //socketAlServidor.connect(direccionServidor);
                             salida = new PrintStream(socketAlServidor.getOutputStream());
                             salida.println(operandos);
                             break;
                         case 5:
                             System.out.println("Hasta pronto!");
-                            //operandos ="salir";
+                            operandos ="salir";
                             //socketAlServidor.connect(direccionServidor);
-                            //salida = new PrintStream(socketAlServidor.getOutputStream());
-                            //salida.println(operandos);
+                            salida = new PrintStream(socketAlServidor.getOutputStream());
+                            salida.println(operandos);
                             flag=false;
                             break;
                         default:

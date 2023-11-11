@@ -123,7 +123,7 @@ public class ClienteSocketGrafico extends JFrame {
         add(btnRestar);
 
         JButton btnMulti = new JButton("Multiplicar");
-        btnMulti.setBounds(220, 198, 89, 23);
+        btnMulti.setBounds(220, 198, 99, 23);
         btnMulti.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 numero1 = num1.getText();
@@ -148,7 +148,7 @@ public class ClienteSocketGrafico extends JFrame {
         add(btnMulti);
 
         JButton btnDiv = new JButton("Dividir");
-        btnDiv.setBounds(319, 198, 89, 23);
+        btnDiv.setBounds(328, 198, 89, 23);
         btnDiv.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 numero1 = num1.getText();

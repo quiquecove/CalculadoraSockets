@@ -51,7 +51,7 @@ public class ClienteSocketGrafico extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        InetSocketAddress direccionServidor = new InetSocketAddress(IP_SERVER, PUERTO);
+        //InetSocketAddress direccionServidor = new InetSocketAddress(IP_SERVER, PUERTO);
         num1 = new JTextField();
         num1.setBounds(35, 56, 96, 20);
         add(num1);

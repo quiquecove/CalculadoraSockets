@@ -10,7 +10,6 @@ import java.net.Socket;
 
 public class ServidorSocket {
     public static final int PUERTO = 2017;
-
     public static void main(String[] args) throws InterruptedException {
         System.out.println("      APLICACI�N DE SERVIDOR      ");
         System.out.println("----------------------------------");

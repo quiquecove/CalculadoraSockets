@@ -115,6 +115,8 @@ public class ClienteSocket {
                 e.printStackTrace();
             }
 
+
+
             System.out.println("CLIENTE: Fin del programa");
         }
 

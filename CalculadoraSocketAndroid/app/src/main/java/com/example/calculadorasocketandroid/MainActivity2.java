@@ -47,9 +47,7 @@ public class MainActivity2 extends AppCompatActivity {
         new ConnectToServerTask().execute();
     }
 
-    private void mostrarErrorConexion() {
-        Toast.makeText(getApplicationContext(), "Error de conexión con el servidor", Toast.LENGTH_SHORT).show();
-    }
+
 
     public void sumar(View view) {
         numero1 = String.valueOf(num1.getText());
@@ -99,7 +97,6 @@ public class MainActivity2 extends AppCompatActivity {
                 socketAlServidor = new Socket(nuevo, PUERTO);
             } catch (IOException e) {
                 e.printStackTrace();
-                mostrarErrorConexion();
             }
             return null;
         }
@@ -120,7 +117,7 @@ public class MainActivity2 extends AppCompatActivity {
                 return bf.readLine(); // Espera al resultado del servidor
             } catch (IOException ex) {
                 ex.printStackTrace();
-                mostrarErrorConexion();
+                //mostrarErrorConexion();
             }
             return null;
         }
@@ -141,7 +138,7 @@ public class MainActivity2 extends AppCompatActivity {
                 socketAlServidor.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                mostrarErrorConexion();
+                //mostrarErrorConexion();
             }
             return null;
         }

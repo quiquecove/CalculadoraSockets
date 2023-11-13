@@ -109,16 +109,17 @@ public class ServidorSocket {
                 //cerrar servidor?
 
                     else if(stringRecibido.contains("salir")){
-                        System.out.println("Apagando servidor...");
-                        flag=false;
-                        String resultado="Server apagado";
+                        System.out.println("Cliente exit");
+                        //flag=false;
+                        String resultado="Server continua";
                         salida = new PrintStream(socketAlCliente.getOutputStream());
                         salida.println(resultado);
                         socketAlCliente.close();
                 }
 
-
-                //Si hemos llegado hasta aqui, cerramos las conexiones
+                if(socketAlCliente.isClosed()){
+                    socketAlCliente=serverSocket.accept();
+                }
 
             }
         } catch (IOException e) {

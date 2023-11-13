@@ -182,6 +182,7 @@ public class ClienteSocketGrafico extends JFrame {
                 //socketAlServidor.connect(direccionServidor);
                 salida = new PrintStream(socketAlServidor.getOutputStream());
                 salida.println(operandos);
+                System.exit(0);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

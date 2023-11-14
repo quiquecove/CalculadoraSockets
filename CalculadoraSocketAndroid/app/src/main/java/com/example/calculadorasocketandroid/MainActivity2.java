@@ -85,7 +85,7 @@ public class MainActivity2 extends AppCompatActivity {
     public void salir(View view) {
         // Cerrar la conexión al servidor en un AsyncTask
         new CloseConnectionTask().execute();
-        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     private class ConnectToServerTask extends AsyncTask<Void, Void, Void> {

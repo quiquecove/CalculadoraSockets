@@ -7,12 +7,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+
 public class ClienteSocketGrafico extends JFrame {
     JTextField num1;
     JTextField num2;
@@ -25,11 +28,14 @@ public class ClienteSocketGrafico extends JFrame {
     String numero2;
     String operandos;
     PrintStream salida;
+
     public static void main(String[] args) {
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try{
+                try {
+                    //si sale en rojo añadir dependencias,
+                    // los jar estan en la carpeta del proyecto
                     UIManager.setLookAndFeel(new FlatOneDarkIJTheme());
                 } catch (UnsupportedLookAndFeelException e) {
                     e.printStackTrace();
@@ -46,6 +52,22 @@ public class ClienteSocketGrafico extends JFrame {
     }
 
     public ClienteSocketGrafico() throws IOException {
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Acciones a realizar cuando se cierra la ventana
+                System.out.println("La ventana se está cerrando");
+                operandos = "salir";
+                //socketAlServidor.connect(direccionServidor);
+                try {
+                    salida = new PrintStream(socketAlServidor.getOutputStream());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                salida.println(operandos);
+                System.exit(0); // Puedes ajustar esto según tus necesidades
+            }
+        });
         try {
             socketAlServidor = new Socket(IP_SERVER, PUERTO);
         } catch (IOException e) {
@@ -169,21 +191,22 @@ public class ClienteSocketGrafico extends JFrame {
                     throw new RuntimeException(ex);
                 }
             }
-            });
+        });
         add(btnDiv);
 
         JButton btnSalir = new JButton("X");
         btnSalir.setBounds(373, 0, 53, 45);
         btnSalir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                try{
+                try {
                     ResHolder.setText("Server Cerrado, hasta pronto");
-                    operandos ="salir";
-                //socketAlServidor.connect(direccionServidor);
-                salida = new PrintStream(socketAlServidor.getOutputStream());
-                salida.println(operandos);
-                System.exit(0);
+                    operandos = "salir";
+                    //socketAlServidor.connect(direccionServidor);
+                    salida = new PrintStream(socketAlServidor.getOutputStream());
+                    salida.println(operandos);
+                    System.exit(0);
                 } catch (IOException ex) {
+                    System.exit(0);
                     throw new RuntimeException(ex);
                 }
             }
@@ -203,16 +226,12 @@ public class ClienteSocketGrafico extends JFrame {
         add(lblNewLabel);
 
 
-
         ResHolder = new JTextPane();
         ResHolder.setBounds(35, 160, 315, 20);
         ResHolder.setEditable(false);
         add(ResHolder);
-
-
         setTitle("Cliente Socket Grafico");
         setBounds(100, 100, 450, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
     }
 }

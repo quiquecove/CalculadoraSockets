@@ -7,7 +7,25 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="flatlaf-intellij-themes-3.1" level="application" />
-    <orderEntry type="library" exported="" name="flatlaf-3.1" level="application" />
+    <orderEntry type="library" name="flatlaf-intellij-themes-3.1" level="application" />
+    <orderEntry type="library" name="flatlaf-3.1" level="application" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/flatlaf-3.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/flatlaf-intellij-themes-3.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

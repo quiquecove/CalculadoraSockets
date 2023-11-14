@@ -7,10 +7,12 @@ import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ServidorSocket {
     public static final int PUERTO = 2017;
-    public static void main(String[] args) throws InterruptedException {
+
+    public static void main(String[] args) throws InterruptedException, IOException {
         System.out.println("      APLICACI�N DE SERVIDOR      ");
         System.out.println("----------------------------------");
 
@@ -53,83 +55,104 @@ public class ServidorSocket {
             boolean flag = true;
             socketAlCliente = serverSocket.accept();
             while (flag) {
+                try {
+                    System.out.println("SERVIDOR: Esperando peticion por el puerto " + PUERTO);
 
-                System.out.println("SERVIDOR: Esperando peticion por el puerto " + PUERTO);
+                    //En este punto, se parara el programa, hasta que entre la peticion de
+                    //un cliente, y sera en ese momento cuando se cree un objeto Socket
+                    System.out.println("SERVIDOR: peticion numero " + ++peticion + " recibida");
 
-                //En este punto, se parara el programa, hasta que entre la peticion de
-                //un cliente, y sera en ese momento cuando se cree un objeto Socket
-                System.out.println("SERVIDOR: peticion numero " + ++peticion + " recibida");
+                    entrada = new InputStreamReader(socketAlCliente.getInputStream());
+                    BufferedReader bf = new BufferedReader(entrada);
 
-                entrada = new InputStreamReader(socketAlCliente.getInputStream());
-                BufferedReader bf = new BufferedReader(entrada);
+                    //El servidor se quedará aquí parado hasta que el cliente nos mande
+                    //informacion, es decir, cuando haga un salida.println(INFORMACION);
+                    String stringRecibido = bf.readLine();//3-4
 
-                //El servidor se quedará aquí parado hasta que el cliente nos mande
-                //informacion, es decir, cuando haga un salida.println(INFORMACION);
-                String stringRecibido = bf.readLine();//3-4
+                    //Hay que tener en cuenta que toda comunicacion entre cliente y servidor
+                    //esta en formato de cadena de texto
+                    System.out.println("SERVIDOR: Me ha llegado del cliente: " + stringRecibido);
+                    //Como sabemos que el cliente nos envia un 3-7, hacemos un split por "-"
+                    //para obtener la información.
 
-                //Hay que tener en cuenta que toda comunicacion entre cliente y servidor
-                //esta en formato de cadena de texto
-                System.out.println("SERVIDOR: Me ha llegado del cliente: " + stringRecibido);
-                //Como sabemos que el cliente nos envia un 3-7, hacemos un split por "-"
-                //para obtener la información.
-                if (stringRecibido.contains("_")) {//suma
-                    String[] operadores = stringRecibido.split("_");
-                    int iNumero1 = Integer.parseInt(operadores[0]);//3
-                    int iNumero2 = Integer.parseInt(operadores[1]);//4
-                    int resultado = iNumero1 + iNumero2;//7
-                    System.out.println("SERVIDOR: La suma de los numeros es: " + resultado);
-                    salida = new PrintStream(socketAlCliente.getOutputStream());
-                    salida.println(resultado);
-                } else if (stringRecibido.contains("-")) {//resta
-                    String[] operadores = stringRecibido.split("-");
-                    int iNumero1 = Integer.parseInt(operadores[0]);//3
-                    int iNumero2 = Integer.parseInt(operadores[1]);//4
-                    int resultado = iNumero1 - iNumero2;//7
-                    System.out.println("SERVIDOR: La resta de los numeros es: " + resultado);
-                    salida = new PrintStream(socketAlCliente.getOutputStream());
-                    salida.println(resultado);
+                    if (stringRecibido.contains("_")) {//suma
+                        String[] operadores = stringRecibido.split("_");
+                        int iNumero1 = Integer.parseInt(operadores[0]);//3
+                        int iNumero2 = Integer.parseInt(operadores[1]);//4
+                        int resultado = iNumero1 + iNumero2;//7
+                        System.out.println("SERVIDOR: La suma de los numeros es: " + resultado);
+                        salida = new PrintStream(socketAlCliente.getOutputStream());
+                        salida.println(resultado);
+                    } else if (stringRecibido.contains("-")) {//resta
+                        String[] operadores = stringRecibido.split("-");
+                        int iNumero1 = Integer.parseInt(operadores[0]);//3
+                        int iNumero2 = Integer.parseInt(operadores[1]);//4
+                        int resultado = iNumero1 - iNumero2;//7
+                        System.out.println("SERVIDOR: La resta de los numeros es: " + resultado);
+                        salida = new PrintStream(socketAlCliente.getOutputStream());
+                        salida.println(resultado);
 
-                } else if (stringRecibido.contains("m")) {//multiplicacion
-                    String[] operadores = stringRecibido.split("m");
-                    int iNumero1 = Integer.parseInt(operadores[0]);//3
-                    int iNumero2 = Integer.parseInt(operadores[1]);//4
-                    int resultado = iNumero1 * iNumero2;//7
-                    System.out.println("SERVIDOR: La multiplicacion de los numeros es: " + resultado);
-                    salida = new PrintStream(socketAlCliente.getOutputStream());
-                    salida.println(resultado);
-                } else if (stringRecibido.contains("/")) {//division
-                    String[] operadores = stringRecibido.split("/");
-                    int iNumero1 = Integer.parseInt(operadores[0]);//3
-                    int iNumero2 = Integer.parseInt(operadores[1]);//4
-                    int resultado = iNumero1 / iNumero2;//7
-                    System.out.println("SERVIDOR: La division de los numeros es: " + resultado);
-                    salida = new PrintStream(socketAlCliente.getOutputStream());
-                    salida.println(resultado);
-                }
-                //cerrar servidor?
-
-                    else if(stringRecibido.contains("salir")){
+                    } else if (stringRecibido.contains("m")) {//multiplicacion
+                        String[] operadores = stringRecibido.split("m");
+                        int iNumero1 = Integer.parseInt(operadores[0]);//3
+                        int iNumero2 = Integer.parseInt(operadores[1]);//4
+                        int resultado = iNumero1 * iNumero2;//7
+                        System.out.println("SERVIDOR: La multiplicacion de los numeros es: " + resultado);
+                        salida = new PrintStream(socketAlCliente.getOutputStream());
+                        salida.println(resultado);
+                    } else if (stringRecibido.contains("/")) {//division
+                        String[] operadores = stringRecibido.split("/");
+                        int iNumero1 = Integer.parseInt(operadores[0]);//3
+                        int iNumero2 = Integer.parseInt(operadores[1]);//4
+                        if (iNumero2 == 0 || iNumero1 == 0) {
+                            String resultado = "Error";
+                            salida = new PrintStream(socketAlCliente.getOutputStream());
+                            salida.println(resultado);
+                        } else {
+                            int resultado = iNumero1 / iNumero2;//7
+                            System.out.println("SERVIDOR: La division de los numeros es: " + resultado);
+                            salida = new PrintStream(socketAlCliente.getOutputStream());
+                            salida.println(resultado);
+                        }
+                    } else if (stringRecibido.contains("salir")) {
                         System.out.println("Cliente exit");
                         //flag=false;
-                        String resultado="Server continua";
+                        String resultado = "Server continua";
                         salida = new PrintStream(socketAlCliente.getOutputStream());
                         salida.println(resultado);
                         socketAlCliente.close();
-                }
+                    } else {
+                        String resultado = "Error, operacion no valida server";//7
+                        System.out.println(resultado);
+                        salida = new PrintStream(socketAlCliente.getOutputStream());
+                        salida.println(resultado);
+                    }
 
-                if(socketAlCliente.isClosed()){
-                    socketAlCliente=serverSocket.accept();
-                }
+                    if (socketAlCliente.isClosed()) {
+                        socketAlCliente = serverSocket.accept();
+                    }
 
-            }
-        } catch (IOException e) {
-            System.err.println("SERVIDOR: Error de entrada/salida");
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.err.println("SERVIDOR: Error -> " + e);
-            e.printStackTrace();
+
+                } catch (NumberFormatException e) {
+                    String resultado = "error";
+                    System.err.println("SERVIDOR: Letra detectada");
+                    salida = new PrintStream(socketAlCliente.getOutputStream());
+                    salida.println(resultado);
+
+                } catch (SocketException e) {
+                    System.out.println("Cliente cerrado repentinamente");
+                    socketAlCliente.close();
+                    serverSocket.accept();
+
+                } catch (IOException e) {
+                    System.err.println("SERVIDOR: Error de entrada/salida");
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    System.err.println("SERVIDOR: Error -> " + e);
+                    e.printStackTrace();
+                }
+            }//FIN DEL PROGRAMA
         }
-    }//FIN DEL PROGRAMA
-
+    }
 
 }
